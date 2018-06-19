@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index",
+    "build": "cd app && npm run build && cd ../"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
-    "handlebars": "^4.0.11",
     "hapi": "^17.5.1",
     "ig4": "github:mono424/instagram4"
   }
