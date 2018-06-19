@@ -1,5 +1,5 @@
 const Ig4Remote = require('./classes/Ig4Remote');
-var { server:serverConfig } = require('./config');
+var serverConfig = require('./config');
 let remote = new Ig4Remote(serverConfig);
 
 remote.start().then( () => {
