@@ -4,7 +4,8 @@ const { spawn } = require('child_process');
 
 module.exports = class Ig4Remote {
 
-  constructor({ port = 3000 } = {}) {
+  constructor({ port = 3000, debug = false } = {}) {
+    this.debug = debug;
     this.port = port;
     this.status = "stopped";
     this.log = [];
@@ -31,25 +32,25 @@ module.exports = class Ig4Remote {
 
     this.server.route({
         method: 'GET',
-        path: '/log',
+        path: '/api/log',
         handler: (...args) => this.route_log(...args)
     });
 
     this.server.route({
         method: 'GET',
-        path: '/stop',
+        path: '/api/stop',
         handler: (...args) => this.route_stop(...args)
     });
 
     this.server.route({
         method: 'GET',
-        path: '/start',
+        path: '/api/start',
         handler: (...args) => this.route_start(...args)
     });
 
     this.server.route({
         method: 'GET',
-        path: '/clear-cookie',
+        path: '/api/clear-cookie',
         handler: (...args) => this.route_clearCookie(...args)
     });
 
@@ -82,7 +83,7 @@ module.exports = class Ig4Remote {
   }
 
   addToIg4Log(data, type = "data") {
-    console.log(data.toString());
+    if(this.debug) { console.log(type, data.toString()); }
     this.log.push({ data, type, date: new Date() });
     while (this.log.length > this.logLineLength) {
       this.log.shift();
