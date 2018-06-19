@@ -11,6 +11,7 @@
   "license": "WTFPL",
   "dependencies": {
     "hapi": "^17.5.1",
-    "ig4": "github:mono424/instagram4"
+    "ig4": "github:mono424/instagram4",
+    "inert": "^5.1.0"
   }
 }

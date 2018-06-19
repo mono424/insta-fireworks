@@ -17,10 +17,16 @@ module.exports = class Ig4Remote {
         port: this.port
     });
 
+    await this.server.register(require('inert'));
+
     this.server.route({
         method: 'GET',
-        path: '/',
-        handler: (...args) => this.route_index(...args)
+        path: '/{param*}',
+        handler: {
+          directory: {
+              path: 'app/build'
+          }
+        }
     });
 
     this.server.route({
