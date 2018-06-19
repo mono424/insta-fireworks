@@ -22,16 +22,6 @@ module.exports = class Ig4Remote {
 
     this.server.route({
         method: 'GET',
-        path: '/{param*}',
-        handler: {
-          directory: {
-              path: 'app/build'
-          }
-        }
-    });
-
-    this.server.route({
-        method: 'GET',
         path: '/api/log',
         handler: (...args) => this.route_log(...args)
     });
@@ -54,6 +44,16 @@ module.exports = class Ig4Remote {
         handler: (...args) => this.route_clearCookie(...args)
     });
 
+    this.server.route({
+        method: 'GET',
+        path: '/{param*}',
+        handler: {
+          directory: {
+              path: 'app/build'
+          }
+        }
+    });
+
     await this.server.start();
   }
 
@@ -70,11 +70,11 @@ module.exports = class Ig4Remote {
   }
 
   handleIg4Data(data) {
-    this.addToIg4Log(data, "data");
+    this.addToIg4Log(data.toString(), "data");
   }
 
   handleIg4Error(error) {
-    this.addToIg4Log(error, "error");
+    this.addToIg4Log(error.toString(), "error");
   }
 
   handleIg4Close(code) {
@@ -83,7 +83,7 @@ module.exports = class Ig4Remote {
   }
 
   addToIg4Log(data, type = "data") {
-    if(this.debug) { console.log(type, data.toString()); }
+    if(this.debug) { console.log(type, data); }
     this.log.push({ data, type, date: new Date() });
     while (this.log.length > this.logLineLength) {
       this.log.shift();
