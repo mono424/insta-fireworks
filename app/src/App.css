@@ -17,7 +17,6 @@ nav {
   box-shadow: -5px 0 30px #a3a3a3;
   box-sizing: border-box;
   color: #fdfdfd;
-  padding-top: 250px;
   top:0;
   left:0;
   bottom:0;
@@ -26,6 +25,15 @@ nav {
 nav ul {
   display: block;
   margin-top: calc(50% - 200px);
+}
+
+nav .status-wrap {
+  padding: 25px;
+}
+
+nav .vert-pad {
+  display: block;
+  height: 150px;
 }
 
 .progress {

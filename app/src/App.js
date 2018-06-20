@@ -26,19 +26,19 @@ class App extends Component {
   }
 
   connectWS() {
-    this.setState({ loading: true });
+    this.setState({ loading: true, connected: false });
     Runtime.wsClient = client;
     client.connect({ timeout: 3000 }).then( () => {
       Runtime.wsError = null;
-      this.setState({ loading: false });
+      this.setState({ loading: false, connected: true  });
 		}).catch( err => {
       Runtime.wsError = err;
-      this.setState({ loading: false });
+      this.setState({ loading: false, connected: false  });
     })
   }
 
   render() {
-    let { loading } = this.state;
+    let { loading, connected } = this.state;
     return (
     <MuiThemeProvider theme={theme}>
       {
@@ -46,7 +46,7 @@ class App extends Component {
         ? (<div className="progress"><CircularProgress /></div>)
         : (
           <BrowserRouter>
-            <Wrapper>
+            <Wrapper connected={connected}>
               <Routes />
             </Wrapper>
           </BrowserRouter>
