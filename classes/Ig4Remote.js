@@ -19,6 +19,9 @@ module.exports = class Ig4Remote {
     });
 
     await this.server.register(require('inert'));
+    await this.server.register(require('nes'));
+
+    this.server.subscription('/ig4/log');
 
     this.server.route({
         method: 'GET',
