@@ -10,7 +10,8 @@ import Wrapper from './components/Wrapper';
 import Runtime from './config/Runtime';
 import './App.css';
 
-const client = new Nes.Client('ws://' + window.location.host);
+// const client = new Nes.Client('ws://' + window.location.host);
+const client = new Nes.Client('ws://localhost:8081');
 
 const theme = createMuiTheme({
   palette: {
@@ -22,6 +23,12 @@ const theme = createMuiTheme({
 class App extends Component {
 
   componentWillMount() {
+    client.onDisconnect = () => {
+      this.connectWS();
+    };
+    client.onConnect = () => {
+      this.setState({ loading: false, connected: true  });
+    };
     this.connectWS();
   }
 

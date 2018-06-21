@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import ActivityHeader from './ActivityHeader';
+import ActivityCards from './ActivityCards';
 import Runtime from '../../config/Runtime';
 
 const styles = {
@@ -21,9 +22,9 @@ class ActivityView extends Component {
     Runtime.wsClient.subscribe('/log', message => {
       let { type, payload } = message;
       if( type === "complete" ) {
-        this.setState({ log: payload });
+        this.setState({ logs: payload });
       }else{
-        this.setState({ log: payload.concat(this.state.log) });
+        this.setState({ logs: payload.concat(this.state.logs) });
       }
     });
   }
@@ -34,12 +35,16 @@ class ActivityView extends Component {
 
   render() {
     let { title, subtitle, classes } = this.props;
-    let { mode, log } = this.state;
-    console.log({log});
+    let { mode, logs } = this.state;
+
     return (
       <div>
         <ActivityHeader onChange={this.changeMode} selected={mode} />
-
+        {
+          mode === "cards"
+          ? <ActivityCards logs={logs} />
+          : null
+        }
       </div>
     );
   }
