@@ -11,6 +11,7 @@ import Runtime from './config/Runtime';
 import './App.css';
 
 // const client = new Nes.Client('ws://' + window.location.host);
+// For Dev
 const client = new Nes.Client('ws://localhost:8081');
 
 const theme = createMuiTheme({
