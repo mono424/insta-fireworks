@@ -22,7 +22,7 @@ module.exports = class Ig4Remote {
     await this.server.register(require('nes'));
 
     this.server.subscription('/log', {
-      onSubscribe: () => this.publishLog()
+      onSubscribe: socket => this.publishLog(null, socket)
     });
 
     this.server.route({
@@ -89,6 +89,11 @@ module.exports = class Ig4Remote {
 
   addToIg4Log(data, type = "data") {
     if(!data) return;
+    try {
+      data = JSON.parse(data);
+    } catch (e) {
+      return;
+    }
     let entry = { data, type, date: new Date() };
     if(this.debug) { console.log(type, data); }
     this.log.push(entry);
@@ -98,11 +103,12 @@ module.exports = class Ig4Remote {
     this.publishLog(entry);
   }
 
-  publishLog(line = null) {
+  publishLog(line = null, socket = null) {
+    socket = socket ? socket : this.server;
     if(line){
-      this.server.publish('/log', { type: "delta", payload: line });
+      socket.publish('/log', { type: "delta", payload: [line] });
     }else{
-      this.server.publish('/log', { type: "complete", payload: this.log.reverse() });
+      socket.publish('/log', { type: "complete", payload: this.log.reverse() });
     }
   }
 
