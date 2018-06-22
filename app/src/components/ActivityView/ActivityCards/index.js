@@ -26,10 +26,11 @@ const styles = (theme) => ({
 class ActivityCards extends Component {
   render() {
     let { classes, logs } = this.props;
+    logs = (logs || []);
+    logs.sort( (a, b) => (new Date(b.date).getTime() - new Date(a.date).getTime()) );
     return (
       <div className={classes.wrap}>
-        { (logs || [])
-          .filter( log =>
+        { logs.filter( log =>
             log.type === "data" &&
             displayedLogs.indexOf(log.data.action) > -1
           ).map( log => {

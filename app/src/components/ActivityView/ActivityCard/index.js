@@ -18,13 +18,32 @@ const styles = (theme) => ({
   caption: {
     height: 40,
     overflow: "hidden"
+  },
+
+  date: {
+    position: "absolute",
+    top: 10,
+    left: 10,
+    background: "rgb(115, 115, 114)",
+    color: "white",
+    padding: "5px 10px",
+    borderRadius: 20
+  },
+
+  card: {
+    position: "relative"
   }
 
 });
 
 class ActivityCard extends Component {
 
-  getMediaInfo(data) {console.log(data);
+  formatDate(date) {
+    let d = new Date(date);
+    return d.getHours() + ":" + d.getMinutes();
+  }
+
+  getMediaInfo(data) {
     let title = "", description = "", media = "", url = "";
     if(data.action === "liked"){
       media = data.data.media.images.length ? data.data.media.images[0].url : "";
@@ -39,6 +58,7 @@ class ActivityCard extends Component {
     let { classes, log, className = "" } = this.props;
     let { data, date } = log;
     let { title, description, media, url } = this.getMediaInfo(data);
+    className = className ? classes.card + " " + className : classes.card;
 
     return (
       <Card className={className}>
@@ -47,6 +67,7 @@ class ActivityCard extends Component {
           image={media}
           title={title}
         />
+        <span className={classes.date}>{this.formatDate(date)}</span>
         <CardContent>
           <Typography gutterBottom variant="headline" component="h2">
             {title}
