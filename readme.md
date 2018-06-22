@@ -6,5 +6,7 @@ Currently in development... Soon we 🎆
 </h1>
 <h2 align="center">
   The Web-Interface for Instagram4
-  <img src="https://preview.ibb.co/dKp5eo/rsz_screenshot.png"/>
 </h2>
+<h3 align="center">
+  <img src="https://preview.ibb.co/dKp5eo/rsz_screenshot.png"/>
+</h3>
