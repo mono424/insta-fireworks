@@ -1,7 +1,7 @@
 main {
   position: fixed;
   display: block;
-  left: 240px;
+  left: 280px;
   right:0;
   top:0;
   bottom:0;
@@ -18,7 +18,7 @@ header {
 nav {
   position: fixed;
   display: block;
-  width: 240px;
+  width: 280px;
   box-shadow: -5px 0 30px #a3a3a3;
   box-sizing: border-box;
   color: #fdfdfd;

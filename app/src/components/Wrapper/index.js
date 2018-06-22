@@ -1,10 +1,37 @@
 import React, { Component } from 'react';
 import StatusCard from '../StatusCard';
+import AccountCard from '../AccountCard';
 import Sidebar from '../Sidebar';
+import Runtime from '../../config/Runtime';
 
 class Wrapper extends Component {
+  state = { stats: null }
+
+  componentDidMount() {
+    Runtime.wsClient.subscribe('/log', message => {
+      let { type, payload } = message;
+      if( type === "complete" ) {
+        payload = payload
+        .filter( log => log.data.action === "status" )
+        .sort( (a, b) => (new Date(b.date).getTime() - new Date(a.date).getTime()) )
+        this.setState({ stats: payload.length > 0 ? payload[0] : null });
+      }else if (payload.action === "status") {
+        this.setState({ stats: payload });
+      }
+    });
+  }
+
   render() {
+    let { stats } = this.state;
+    let {
+      followerCount = 0,
+      followingCount = 0,
+      periodStates = {}, // {autoFollow: false, autoLike: true}
+      pk = null,
+      username = null
+    } = stats ? stats.data.data : {};
     let { children, connected } = this.props;
+
     return (
       <div>
         <main>
@@ -12,7 +39,8 @@ class Wrapper extends Component {
         </main>
         <nav>
         <div className="status-wrap">
-          <StatusCard connected={connected} />
+          <StatusCard connected={connected} /><br />
+          <AccountCard username={username} followerCount={followerCount} followingCount={followingCount} />
         </div>
         <span className="vert-pad"></span>
         <Sidebar />

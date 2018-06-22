@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Header from '../../components/Header';
 import ActivityView from '../../components/ActivityView';
-import StatusContainer from '../../components/StatusContainer';
 
 class Home extends Component {
 
@@ -9,7 +8,6 @@ class Home extends Component {
     return (
       <div>
         <Header title="Overview" subtitle="Nothing better than some 🎆"/>
-        <StatusContainer />
         <ActivityView />
       </div>
     );
