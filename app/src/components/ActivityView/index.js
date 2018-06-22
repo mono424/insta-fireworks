@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import ActivityHeader from './ActivityHeader';
 import ActivityCards from './ActivityCards';
+import ActivityLog from './ActivityLog';
 import Runtime from '../../config/Runtime';
 
 const styles = {
@@ -43,7 +44,7 @@ class ActivityView extends Component {
         {
           mode === "cards"
           ? <ActivityCards logs={logs} />
-          : null
+          : <ActivityLog logs={logs} />
         }
       </div>
     );
