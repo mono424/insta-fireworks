@@ -19,15 +19,21 @@ class ActivityView extends Component {
     mode: "cards"
   }
 
+  componentWillUnmount() {
+    Runtime.wsClient.unsubscribe('/log', this.subHandler);
+  }
+
   componentDidMount() {
-    Runtime.wsClient.subscribe('/log', message => {
-      let { type, payload } = message;
-      if( type === "complete" ) {
-        this.setState({ logs: payload });
-      }else{
-        this.setState({ logs: payload.concat(this.state.logs) });
-      }
-    });
+    Runtime.wsClient.subscribe('/log', this.subHandler);
+  }
+
+  subHandler = message => {
+    let { type, payload } = message;
+    if( type === "complete" ) {
+      this.setState({ logs: payload });
+    }else{
+      this.setState({ logs: payload.concat(this.state.logs) });
+    }
   }
 
   changeMode = mode => {

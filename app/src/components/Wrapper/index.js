@@ -7,18 +7,24 @@ import Runtime from '../../config/Runtime';
 class Wrapper extends Component {
   state = { stats: null }
 
+  componentWillUnmount() {
+    Runtime.wsClient.unsubscribe('/log', this.subHandler);
+  }
+
   componentDidMount() {
-    Runtime.wsClient.subscribe('/log', message => {
-      let { type, payload } = message;
-      if( type === "complete" ) {
-        payload = payload
-        .filter( log => log.data.action === "status" )
-        .sort( (a, b) => (new Date(b.date).getTime() - new Date(a.date).getTime()) )
-        this.setState({ stats: payload.length > 0 ? payload[0] : null });
-      }else if (payload.action === "status") {
-        this.setState({ stats: payload });
-      }
-    });
+    Runtime.wsClient.subscribe('/log', this.subHandler);
+  }
+
+  subHandler = message => {
+    let { type, payload } = message;
+    if( type === "complete" ) {
+      payload = payload
+      .filter( log => log.data.action === "status" )
+      .sort( (a, b) => (new Date(b.date).getTime() - new Date(a.date).getTime()) )
+      this.setState({ stats: payload.length > 0 ? payload[0] : null });
+    }else if (payload.action === "status") {
+      this.setState({ stats: payload });
+    }
   }
 
   render() {

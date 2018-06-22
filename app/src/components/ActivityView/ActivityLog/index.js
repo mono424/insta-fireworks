@@ -10,7 +10,7 @@ const styles = (theme) => ({
 
   date: {
     display: "inline-block",
-    width: 45,
+    width: 65,
     marginRight: 10,
     background: "rgb(115, 115, 114)",
     color: "white",
@@ -25,10 +25,11 @@ class ActivityLog extends Component {
 
   formatDate(date) {
     let d = new Date(date);
-    return d.getHours().toString().padStart(2, "0") + ":" + d.getMinutes().toString().padStart(2, "0");
+    return d.getHours().toString().padStart(2, "0") + ":" + d.getMinutes().toString().padStart(2, "0") + ":" + d.getSeconds().toString().padStart(2, "0");
   }
 
   logLine(log, classes) {
+      if(!log) return;
       let date = <span className={classes.date}>{this.formatDate(log.date)}</span>
       if ( log.type === "data" ) {
         switch (log.data.action) {
@@ -36,7 +37,7 @@ class ActivityLog extends Component {
           return <p key={log.date}>{date}Updated Account Status</p>
 
           case "liked":
-          return <p key={log.date}>{date}Liked Media: {log.data.data.media.caption.substr(0, 32)}</p>
+          return <p key={log.date}>{date}Liked Media: {(log.data.data.media.caption || log.data.data.media.id).substr(0, 32)}</p>
 
           case "unliked":
           return <p key={log.date}>{date}Unliked Media: {JSON.stringify(log.data)}</p>
