@@ -8,6 +8,7 @@ main {
   box-sizing: border-box;
   padding: 20px 35px;
   background: #fafaf9;
+  overflow-y: auto;
 }
 
 header {

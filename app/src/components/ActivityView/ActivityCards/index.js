@@ -13,7 +13,7 @@ const styles = (theme) => ({
 
   wrap: {
     display: "flex",
-    // justifyContent: ""
+    flexFlow: "row wrap"
   },
 
   card: {
