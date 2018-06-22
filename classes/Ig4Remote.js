@@ -92,7 +92,7 @@ module.exports = class Ig4Remote {
     try {
       data = JSON.parse(data);
     } catch (e) {
-      return;
+      // data is not json
     }
     let entry = { data, type, date: new Date() };
     if(this.debug) { console.log(type, data); }
