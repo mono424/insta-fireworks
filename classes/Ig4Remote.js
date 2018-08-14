@@ -1,19 +1,28 @@
 const fs = require('fs');
 const Hapi = require('hapi');
+const Joi = require('joi');
 const { spawn } = require('child_process');
+const Ig4Config = require('./Ig4Config');
 
 module.exports = class Ig4Remote {
 
-  constructor({ port = 3000, debug = false } = {}) {
+  constructor({ port = 3000, debug = false, configPath = "ig4.config.js", credPath = "ig4.cred.js" } = {}) {
+    this.configPath = configPath;
+    this.credPath = credPath;
     this.debug = debug;
     this.port = port;
     this.status = "stopped";
     this.log = [];
     this.ig4 = null;
     this.logLineLength = 400;
+    this.config = null;
   }
 
   async start() {
+    let { credPath, configPath } = this;
+    this.config = new Ig4Config(configPath, credPath);
+    await this.config.init();
+
     this.server = Hapi.server({
         port: this.port
     });
@@ -23,6 +32,23 @@ module.exports = class Ig4Remote {
 
     this.server.subscription('/log', {
       onSubscribe: socket => this.publishLog(null, socket)
+    });
+
+    this.server.route({
+      method: 'GET',
+      path: '/api/config',
+      handler: (...args) => this.route_config_get(...args)
+    });
+
+    this.server.route({
+      method: 'POST',
+      path: '/api/config',
+      handler: (...args) => this.route_config_post(...args),
+      validate: {
+        payload: {
+          config: Joi.object().required()
+        }
+      }
     });
 
     this.server.route({
@@ -63,7 +89,8 @@ module.exports = class Ig4Remote {
   }
 
   ig4Start() {
-    this.ig4 = spawn('node', ['./node_modules/ig4', '-json', '-credentials=../../ig4.cred.js', '-config=../../ig4.config.js']);
+    let { credPath, configPath } = this;
+    this.ig4 = spawn('node', ['./node_modules/ig4', '-json', `-credentials=../../${credPath}`, `-config=../../${configPath}`]);
     this.ig4.stdout.on('data', (...args) => this.handleIg4Data(...args));
     this.ig4.stderr.on('data', (...args) => this.handleIg4Error(...args));
     this.ig4.on('close', (...args) => this.handleIg4Close(...args));
@@ -132,6 +159,16 @@ module.exports = class Ig4Remote {
 
   route_clearCookie(request, h) {
     fs.unlinkSync('./data/cookies/user.json');
+    return "ok";
+  }
+
+  route_config_get(request, h) {
+    return JSON.stringify(this.config.getConfig());    
+  }
+
+  async route_config_post(request, h) {
+    let { config } = request.payload;
+    await this.config.updateConfig(config);
     return "ok";
   }
 
