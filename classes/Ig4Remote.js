@@ -6,7 +6,9 @@ const Ig4Config = require('./Ig4Config');
 
 module.exports = class Ig4Remote {
 
-  constructor({ port = 3000, debug = false, configPath = "ig4.config.js", credPath = "ig4.cred.js" } = {}) {
+  constructor({ port = 3000, debug = false, configPath = "../config/config.js", credPath = "../config/cred.js", configOverwritePath = "../config/overwrites/config.json", credOverwritePath = "../config/overwrites/cred.json" } = {}) {
+    this.configOverwritePath = configOverwritePath;
+    this.credOverwritePath = credOverwritePath;
     this.configPath = configPath;
     this.credPath = credPath;
     this.debug = debug;
@@ -19,8 +21,8 @@ module.exports = class Ig4Remote {
   }
 
   async start() {
-    let { credPath, configPath } = this;
-    this.config = new Ig4Config(configPath, credPath);
+    let { credPath, configPath, configOverwritePath, credOverwritePath } = this;
+    this.config = new Ig4Config(configPath, credPath, configOverwritePath, credOverwritePath);
     await this.config.init();
 
     this.server = Hapi.server({
@@ -44,11 +46,11 @@ module.exports = class Ig4Remote {
       method: 'POST',
       path: '/api/config',
       handler: (...args) => this.route_config_post(...args),
-      validate: {
-        payload: {
-          config: Joi.object().required()
-        }
-      }
+      // validate: {
+      //   payload: {
+      //     config: Joi.object().required()
+      //   }
+      // }
     });
 
     this.server.route({
@@ -90,7 +92,7 @@ module.exports = class Ig4Remote {
 
   ig4Start() {
     let { credPath, configPath } = this;
-    this.ig4 = spawn('node', ['./node_modules/ig4', '-json', `-credentials=../../${credPath}`, `-config=../../${configPath}`]);
+    this.ig4 = spawn('node', ['./node_modules/ig4', '-json', `-credentials=../${credPath}`, `-config=../${configPath}`]);
     this.ig4.stdout.on('data', (...args) => this.handleIg4Data(...args));
     this.ig4.stderr.on('data', (...args) => this.handleIg4Error(...args));
     this.ig4.on('close', (...args) => this.handleIg4Close(...args));

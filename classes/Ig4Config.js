@@ -3,12 +3,15 @@ const util = require('util');
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
+const exists = util.promisify(fs.exists);
 
 module.exports = class Ig4Config {
 
-    async constructor(configPath, credPath) {
-        this.configPath = configPath;
-        this.credPath = credPath;
+    constructor(configPath, credPath, configOverwritePath, credOverwritePath) {
+        this.configOverwritePath = __dirname + "/" + configOverwritePath;
+        this.credOverwritePath = __dirname + "/" + credOverwritePath;
+        this.configPath = __dirname + "/" + configPath;
+        this.credPath = __dirname + "/" + credPath;
         this.cache = {
             config: null,
             cred: null
@@ -16,15 +19,21 @@ module.exports = class Ig4Config {
     }
 
     //async
-    init() {
+    async init() {
+        if (! await exists(this.credOverwritePath)) {
+            await writeFile(this.credOverwritePath, '{}');
+        }
+        if (! await exists(this.configOverwritePath)) {
+            await writeFile(this.configOverwritePath, '{}');
+        }
         return this.updateCache();
     }
 
     // async
     async updateCache() {
         this.cache = {
-            config: JSON.parse(await readFile(this.configPath)),
-            cred: JSON.parse(await readFile(this.credPath))
+            config: Object.assign(require(this.configPath), JSON.parse(await readFile(this.configOverwritePath))),
+            cred: Object.assign(require(this.credPath), JSON.parse(await readFile(this.credOverwritePath))),
         };
     }
 
