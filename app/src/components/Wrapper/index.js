@@ -4,6 +4,7 @@ import AccountCard from '../AccountCard';
 import Sidebar from '../Sidebar';
 import Runtime from '../../config/Runtime';
 import { connect } from "react-redux";
+import { withRouter } from 'react-router-dom';
 
 const mapStateToProps = state => {
   return { stats: state.stats };
@@ -41,4 +42,4 @@ class Wrapper extends Component {
   }
 }
 
-export default connect(mapStateToProps)(Wrapper);
+export default withRouter(connect(mapStateToProps)(Wrapper));

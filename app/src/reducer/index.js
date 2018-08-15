@@ -1,4 +1,5 @@
 const initialState = {
+    settings: {},
     stats: null,
     logs: []
 };
@@ -27,7 +28,7 @@ const rootReducer = (state = initialState, action) => {
                 state.stats = payload.data.data;
             }        
         break;
-    } console.log(state);
+    }
     return state;
 };
 export default rootReducer;

@@ -5,6 +5,7 @@ import ActivityCards from './ActivityCards';
 import ActivityLog from './ActivityLog';
 import Runtime from '../../config/Runtime';
 import { connect } from "react-redux";
+import { withRouter } from 'react-router-dom';
 
 const mapStateToProps = state => {
   return { logs: state.logs };
@@ -44,4 +45,4 @@ class ActivityView extends Component {
   }
 }
 
-export default connect(mapStateToProps)(withStyles(styles)(ActivityView));
+export default withRouter(connect(mapStateToProps)(withStyles(styles)(ActivityView)));

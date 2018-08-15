@@ -3,7 +3,7 @@ import Nes from 'nes/client';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import indigo from '@material-ui/core/colors/indigo';
 import blue from '@material-ui/core/colors/blue';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router, withRouter } from 'react-router-dom';
 import Routes from './config/Routes';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Wrapper from './components/Wrapper';
@@ -58,13 +58,13 @@ class App extends Component {
         loading
         ? (<div className="progress"><CircularProgress /></div>)
         : (
-          <BrowserRouter>
+          <Router>
             <Provider store={store}>
               <Wrapper connected={connected}>
                 <Routes />
               </Wrapper>
             </Provider>
-          </BrowserRouter>
+          </Router>
         )
       }
     </MuiThemeProvider>
