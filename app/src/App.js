@@ -9,7 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Wrapper from './components/Wrapper';
 import { Provider } from 'react-redux';
 import store from './store.js';
-import { subLogs } from './actions'
+import { subLogs, subSettings } from './actions'
 import Runtime from './config/Runtime';
 import './App.css';
 
@@ -43,6 +43,7 @@ class App extends Component {
       Runtime.wsError = null;
       this.setState({ loading: false, connected: true  });
       store.dispatch(subLogs());
+      store.dispatch(subSettings());
 		}).catch( err => {
       Runtime.wsError = err;
       this.setState({ loading: false, connected: false  });

@@ -37,6 +37,10 @@ module.exports = class Ig4Remote {
       onSubscribe: socket => this.publishLog(null, socket)
     });
 
+    this.server.subscription('/settings', {
+      onSubscribe: socket => this.publishSettings(socket)
+    });
+
     this.server.route({
       method: 'GET',
       path: '/api/config',
@@ -142,6 +146,11 @@ module.exports = class Ig4Remote {
     }else{
       socket.publish('/log', { type: "complete", payload: this.log.reverse() });
     }
+  }
+
+  publishSettings(socket = null) {
+    socket = socket ? socket : this.server;
+    socket.publish('/settings', { type: "complete", payload: this.config.getConfig() });
   }
 
   route_index(request, h) {
