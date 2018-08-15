@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index",
     "postinstall": "npm i && cd app && npm i && cd .. && npm run rebuild",
-    "rebuild": "cd app && npm run build && cd ../"
+    "rebuild": "cd app && npm run build && cd ../",
+    "start-noui": "node index --noui --port=8081"
   },
   "author": "",
   "license": "WTFPL",

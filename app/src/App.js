@@ -7,12 +7,15 @@ import { BrowserRouter } from 'react-router-dom';
 import Routes from './config/Routes';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Wrapper from './components/Wrapper';
+import { Provider } from 'react-redux';
+import store from './store.js';
+import { subLogs } from './actions'
 import Runtime from './config/Runtime';
 import './App.css';
 
-const client = new Nes.Client('ws://' + window.location.host);
+// const client = new Nes.Client('ws://' + window.location.host);
 // For Dev
-// const client = new Nes.Client('ws://localhost:8081');
+const client = new Nes.Client('ws://localhost:8081');
 
 const theme = createMuiTheme({
   palette: {
@@ -39,6 +42,7 @@ class App extends Component {
     client.connect({ timeout: 3000 }).then( () => {
       Runtime.wsError = null;
       this.setState({ loading: false, connected: true  });
+      store.dispatch(subLogs());
 		}).catch( err => {
       Runtime.wsError = err;
       this.setState({ loading: false, connected: false  });
@@ -54,9 +58,11 @@ class App extends Component {
         ? (<div className="progress"><CircularProgress /></div>)
         : (
           <BrowserRouter>
-            <Wrapper connected={connected}>
-              <Routes />
-            </Wrapper>
+            <Provider store={store}>
+              <Wrapper connected={connected}>
+                <Routes />
+              </Wrapper>
+            </Provider>
           </BrowserRouter>
         )
       }

@@ -4,6 +4,11 @@ import ActivityHeader from './ActivityHeader';
 import ActivityCards from './ActivityCards';
 import ActivityLog from './ActivityLog';
 import Runtime from '../../config/Runtime';
+import { connect } from "react-redux";
+
+const mapStateToProps = state => {
+  return { logs: state.logs };
+};
 
 const styles = {
 
@@ -15,25 +20,7 @@ const styles = {
 
 class ActivityView extends Component {
   state = {
-    log: [],
     mode: "cards"
-  }
-
-  componentWillUnmount() {
-    Runtime.wsClient.unsubscribe('/log', this.subHandler);
-  }
-
-  componentDidMount() {
-    Runtime.wsClient.subscribe('/log', this.subHandler);
-  }
-
-  subHandler = message => {
-    let { type, payload } = message;
-    if( type === "complete" ) {
-      this.setState({ logs: payload });
-    }else{
-      this.setState({ logs: payload.concat(this.state.logs) });
-    }
   }
 
   changeMode = mode => {
@@ -41,9 +28,9 @@ class ActivityView extends Component {
   }
 
   render() {
-    let { title, subtitle, classes } = this.props;
-    let { mode, logs } = this.state;
-
+    let { title, subtitle, classes, logs } = this.props;
+    let { mode } = this.state;
+    
     return (
       <div>
         <ActivityHeader onChange={this.changeMode} selected={mode} />
@@ -57,4 +44,4 @@ class ActivityView extends Component {
   }
 }
 
-export default withStyles(styles)(ActivityView);
+export default connect(mapStateToProps)(withStyles(styles)(ActivityView));

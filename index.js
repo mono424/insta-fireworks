@@ -1,5 +1,15 @@
 const Ig4Remote = require('./classes/Ig4Remote');
 var serverConfig = require('./config');
+
+process.argv.forEach(val => {
+  if (val === "--noui") {
+    serverConfig.userinterface = false;
+  }
+if (val.match(/--port=.*/)) {
+    serverConfig.port = val.substr(7);
+  }
+});
+
 let remote = new Ig4Remote(serverConfig);
 
 remote.start().then( () => {

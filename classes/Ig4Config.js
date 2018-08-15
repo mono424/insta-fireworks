@@ -58,12 +58,12 @@ module.exports = class Ig4Config {
 
     // async
     saveCred() {
-        return writeFile(this.credPath, JSON.stringify(this.cache.cred));
+        return writeFile(this.credOverwritePath, JSON.stringify(this.cache.cred));
     }
 
     // async
     saveConfig() {
-        return writeFile(this.configPath, JSON.stringify(this.cache.config));
+        return writeFile(this.configOverwritePath, JSON.stringify(this.cache.config));
     }
 
 }

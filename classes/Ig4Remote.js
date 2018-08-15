@@ -6,13 +6,14 @@ const Ig4Config = require('./Ig4Config');
 
 module.exports = class Ig4Remote {
 
-  constructor({ port = 3000, debug = false, configPath = "../config/config.js", credPath = "../config/cred.js", configOverwritePath = "../config/overwrites/config.json", credOverwritePath = "../config/overwrites/cred.json" } = {}) {
+  constructor({ port = 3000, debug = false, userinterface = true, configPath = "../config/config.js", credPath = "../config/cred.js", configOverwritePath = "../config/overwrites/config.json", credOverwritePath = "../config/overwrites/cred.json" } = {}) {
     this.configOverwritePath = configOverwritePath;
     this.credOverwritePath = credOverwritePath;
     this.configPath = configPath;
     this.credPath = credPath;
     this.debug = debug;
     this.port = port;
+    this.userinterface = userinterface;
     this.status = "stopped";
     this.log = [];
     this.ig4 = null;
@@ -77,16 +78,18 @@ module.exports = class Ig4Remote {
         handler: (...args) => this.route_clearCookie(...args)
     });
 
-    this.server.route({
+    if (this.userinterface) {
+      this.server.route({
         method: 'GET',
         path: '/{param*}',
         handler: {
           directory: {
-              path: 'app/build'
+            path: 'app/build'
           }
         }
-    });
-
+      });
+    }
+      
     await this.server.start();
   }
 
