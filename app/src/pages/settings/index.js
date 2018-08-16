@@ -30,6 +30,7 @@ const styles = {
 class Settings extends Component {
 
   state = {
+    isSaving: false,
     unsafedSettings: {}
   }
 
@@ -37,6 +38,10 @@ class Settings extends Component {
     this.setState({
       unsafedSettings: Object.assign(this.state.unsafedSettings, { tags })
     });
+  }
+
+  save = () => {
+
   }
 
   render() {
