@@ -6,6 +6,7 @@ import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
 import LabelIcon from '@material-ui/icons/Label';
 import Button from '@material-ui/core/Button';
+import TagAddDialog from './TagAddDialog';
 
 const styles = theme => ({
     root: {
@@ -29,11 +30,30 @@ const styles = theme => ({
 
 class Tags extends React.Component {
 
-    onDelete = (tag) => {
+    state = {
+        tagDialogOpen: false,
+    };
+
+    openTagDialog = () => {
+        this.setState({ tagDialogOpen: true });
+    };
+
+    onTagAdd = (tag) => {
+        this.props.tags.push(tag);
+        this.props.onChange(this.props.tags);
+        this.setState({ tagDialogOpen: false });
+    };
+
+    onTagCancel = () => {
+        this.setState({ tagDialogOpen: false });
+    };
+
+    onTagDelete = (tag) => {
         this.props.onChange(this.props.tags.filter(t => t !== tag));
     }
 
     render() {
+        const { tagDialogOpen } = this.state;
         const { classes, tags } = this.props;
 
         return (
@@ -44,15 +64,16 @@ class Tags extends React.Component {
                             <Chip
                                 key={tag}
                                 label={tag}
-                                onDelete={() => this.onDelete(tag)}
+                                onDelete={() => this.onTagDelete(tag)}
                                 className={classes.chip}
                             />
                         );
                     })}
                 </div>
-                <Button color="primary" className={classes.button}>
+                <Button onClick={this.openTagDialog} color="primary" className={classes.button}>
                     Add
                 </Button>
+                <TagAddDialog open={tagDialogOpen} onAdd={this.onTagAdd} onCancel={this.onTagCancel} />
             </Paper>
         );
     }
