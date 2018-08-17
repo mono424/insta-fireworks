@@ -55,7 +55,7 @@ class Settings extends Component {
     } catch (error) {
       this.setState({ error });
     }
-    this.setState({ isSaving: false });
+    this.setState({ isSaving: false, unsafedSettings: {} });
   }
 
   hasUnsafedState = () => {
