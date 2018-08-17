@@ -186,6 +186,7 @@ module.exports = class Ig4Remote {
   async route_config_post(request, h) {
     let { config } = request.payload;
     await this.config.updateConfig(config);
+    this.publishSettings();
     return "ok";
   }
 
