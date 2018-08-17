@@ -13,9 +13,12 @@ import { subLogs, subSettings } from './actions'
 import Runtime from './config/Runtime';
 import './App.css';
 
-// const client = new Nes.Client('ws://' + window.location.host);
+Runtime.serverUrl = window.location.host;
+
 // For Dev
-const client = new Nes.Client('ws://localhost:8081');
+Runtime.serverUrl = "localhost:8081";
+
+const client = new Nes.Client(`ws://${Runtime.serverUrl}`);
 
 const theme = createMuiTheme({
   palette: {

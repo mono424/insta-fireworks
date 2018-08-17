@@ -27,7 +27,10 @@ module.exports = class Ig4Remote {
     await this.config.init();
 
     this.server = Hapi.server({
-        port: this.port
+        port: this.port,
+        routes: {
+          cors: { origin: ['*'] }
+        }
     });
 
     await this.server.register(require('inert'));

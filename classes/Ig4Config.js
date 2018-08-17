@@ -5,6 +5,7 @@ const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 const exists = util.promisify(fs.exists);
 
+
 module.exports = class Ig4Config {
 
     constructor(configPath, credPath, configOverwritePath, credOverwritePath) {
@@ -12,6 +13,8 @@ module.exports = class Ig4Config {
         this.credOverwritePath = __dirname + "/" + credOverwritePath;
         this.configPath = __dirname + "/" + configPath;
         this.credPath = __dirname + "/" + credPath;
+        this.oConfig = require(this.configPath);
+        this.oCred = require(this.credPath);
         this.cache = {
             config: null,
             cred: null
@@ -32,8 +35,8 @@ module.exports = class Ig4Config {
     // async
     async updateCache() {
         this.cache = {
-            config: Object.assign(require(this.configPath), JSON.parse(await readFile(this.configOverwritePath))),
-            cred: Object.assign(require(this.credPath), JSON.parse(await readFile(this.credOverwritePath))),
+            config: Object.assign({}, this.oConfig, JSON.parse(await readFile(this.configOverwritePath))),
+            cred: Object.assign({}, this.oCred, JSON.parse(await readFile(this.credOverwritePath))),
         };
     }
 
@@ -42,8 +45,8 @@ module.exports = class Ig4Config {
     }
 
     // async
-    updateConfig(newConfig) {
-        this.cache.config = newConfig;
+    updateConfig(delta) {
+        this.cache.config = Object.assign({}, this.cache.config, delta);
         return this.saveConfig();
     }
 
