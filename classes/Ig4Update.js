@@ -26,6 +26,7 @@ module.exports = class Ig4Update {
                     reject(Boom.preconditionFailed("Already up to date!"));
                 }
                 updater.update((success, error) => {
+                    console.log(success ? "✔ Update successful" : "❌ Update failed");
                     if (error) {
                         return reject(Boom.internal(error));
                     }

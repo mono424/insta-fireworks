@@ -1,11 +1,11 @@
 {
   "name": "insta-fireworks",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "pm2 start ./index.js",
-    "dev": "pm2 start ./index.js --watch --no-daemon",
+    "dev": "pm2 start ./index.js --no-daemon",
     "stop": "pm2 kill",
     "postinstall": "npm i && cd app && npm i && cd .. && npm run rebuild",
     "rebuild": "cd app && npm run build && cd ../",
