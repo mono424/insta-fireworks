@@ -11,7 +11,7 @@ module.exports = class Ig4Update {
 
     check() {
         let { updater } = this;
-        return new Promise((resolve, reject) => updater.check((error, upToDate) => { error ? reject(error) : resolve(upToDate); }));
+        return new Promise((resolve, reject) => updater.check((error, upToDate) => { error ? reject(error) : resolve(!upToDate); }));
     }
 
     update(killAfter = false) {
@@ -32,6 +32,7 @@ module.exports = class Ig4Update {
                         resolve();
                     });
                 }
+                reject("Already up to date.");
             })
         })
         .then(this.updateNPM)
