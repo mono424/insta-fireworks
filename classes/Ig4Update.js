@@ -48,10 +48,9 @@ module.exports = class Ig4Update {
     updateNPM() {
         return new Promise( (resolve) => {
             var child_process = require('child_process');
-            child_process.once('exit', function () {
-                resolve();
-            });
-            child_process.execSync("npm install", { stdio: [0, 1, 2] });
+            var child = child_process.spawn("npm install");
+            ls.stdout.on('data', (data) => console.log(`npm: ${data}`));
+            child.on('exit', resolve);
         });
     }
 
