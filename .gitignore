@@ -1,4 +1,4 @@
 ig4.*.js
-config/overwrite/*.json
+cred.json
 config.json
 node_modules
