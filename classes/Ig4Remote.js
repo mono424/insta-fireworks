@@ -61,7 +61,7 @@ module.exports = class Ig4Remote {
     this.server.route({
       method: 'POST',
       path: '/api/update',
-      handler: () => this.updater.update()
+      handler: () => this.updater.update(true)
     });
 
     this.server.route({
