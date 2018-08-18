@@ -4,17 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index",
+    "start": "pm2 start ./index.js",
+    "dev": "pm2 start ./index.js && pm2 log",
+    "stop": "pm2 kill",
     "postinstall": "npm i && cd app && npm i && cd .. && npm run rebuild",
     "rebuild": "cd app && npm run build && cd ../",
-    "start-noui": "node index --noui --port=8081"
+    "start-noui": "pm2 start ./index.js --noui --port=8081"
   },
   "author": "",
   "license": "WTFPL",
   "dependencies": {
+    "github-update": "^1.1.4",
     "hapi": "^17.5.1",
     "ig4": "github:mono424/instagram4",
     "inert": "^5.1.0",
-    "nes": "^9.0.0"
+    "nes": "^9.0.0",
+    "pm2": "^3.0.3"
   }
 }

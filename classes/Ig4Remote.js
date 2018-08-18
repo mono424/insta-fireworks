@@ -3,6 +3,7 @@ const Hapi = require('hapi');
 const Joi = require('joi');
 const { spawn } = require('child_process');
 const Ig4Config = require('./Ig4Config');
+const Ig4Update = require('./Ig4Update');
 
 module.exports = class Ig4Remote {
 
@@ -24,6 +25,7 @@ module.exports = class Ig4Remote {
   async start() {
     let { credPath, configPath, configOverwritePath, credOverwritePath } = this;
     this.config = new Ig4Config(configPath, credPath, configOverwritePath, credOverwritePath);
+    this.updater = new Ig4Update();
     await this.config.init();
 
     this.server = Hapi.server({
@@ -48,6 +50,18 @@ module.exports = class Ig4Remote {
       method: 'GET',
       path: '/api/config',
       handler: (...args) => this.route_config_get(...args)
+    });
+
+    this.server.route({
+      method: 'GET',
+      path: '/api/update',
+      handler: () => this.updater.check()
+    });
+
+    this.server.route({
+      method: 'POST',
+      path: '/api/update',
+      handler: () => this.updater.update()
     });
 
     this.server.route({
