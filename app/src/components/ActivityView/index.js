@@ -3,7 +3,6 @@ import { withStyles } from '@material-ui/core/styles';
 import ActivityHeader from './ActivityHeader';
 import ActivityCards from './ActivityCards';
 import ActivityLog from './ActivityLog';
-import Runtime from '../../config/Runtime';
 import { connect } from "react-redux";
 import { withRouter } from 'react-router-dom';
 

@@ -1,4 +1,5 @@
 const initialState = {
+    status: null,
     settings: {},
     stats: null,
     logs: []
@@ -6,6 +7,9 @@ const initialState = {
 const rootReducer = (state = initialState, action) => {
     state = Object.assign({}, state);
     switch (action.type) {
+        case "STATUS_PAYLOAD":
+            state.status = action.payload.payload;
+        break;
         case "SETTINGS_PAYLOAD":
             state.settings = action.payload.payload;
         break;

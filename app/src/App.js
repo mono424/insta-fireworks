@@ -9,14 +9,14 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Wrapper from './components/Wrapper';
 import { Provider } from 'react-redux';
 import store from './store.js';
-import { subLogs, subSettings } from './actions'
+import { subLogs, subSettings, subStatus } from './actions'
 import Runtime from './config/Runtime';
 import './App.css';
 
 Runtime.serverUrl = window.location.host;
 
 // For Dev
-// Runtime.serverUrl = "localhost:8081";
+Runtime.serverUrl = "localhost:8080";
 
 const client = new Nes.Client(`ws://${Runtime.serverUrl}`);
 
@@ -47,6 +47,7 @@ class App extends Component {
       this.setState({ loading: false, connected: true  });
       store.dispatch(subLogs());
       store.dispatch(subSettings());
+      store.dispatch(subStatus());
 		}).catch( err => {
       Runtime.wsError = err;
       this.setState({ loading: false, connected: false  });

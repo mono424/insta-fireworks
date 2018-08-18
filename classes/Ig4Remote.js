@@ -38,11 +38,15 @@ module.exports = class Ig4Remote {
     await this.server.register(require('inert'));
     await this.server.register(require('nes'));
 
-    this.server.subscription('/log', {
+    this.server.subscription('/sub/status', {
+      onSubscribe: socket => this.publishStatus(null, socket)
+    });
+
+    this.server.subscription('/sub/log', {
       onSubscribe: socket => this.publishLog(null, socket)
     });
 
-    this.server.subscription('/settings', {
+    this.server.subscription('/sub/settings', {
       onSubscribe: socket => this.publishSettings(socket)
     });
 
@@ -67,12 +71,7 @@ module.exports = class Ig4Remote {
     this.server.route({
       method: 'POST',
       path: '/api/config',
-      handler: (...args) => this.route_config_post(...args),
-      // validate: {
-      //   payload: {
-      //     config: Joi.object().required()
-      //   }
-      // }
+      handler: (...args) => this.route_config_post(...args)
     });
 
     this.server.route({
@@ -82,19 +81,19 @@ module.exports = class Ig4Remote {
     });
 
     this.server.route({
-        method: 'GET',
+        method: 'POST',
         path: '/api/stop',
         handler: (...args) => this.route_stop(...args)
     });
 
     this.server.route({
-        method: 'GET',
+        method: 'POST',
         path: '/api/start',
         handler: (...args) => this.route_start(...args)
     });
 
     this.server.route({
-        method: 'GET',
+        method: 'POST',
         path: '/api/clear-cookie',
         handler: (...args) => this.route_clearCookie(...args)
     });
@@ -121,6 +120,7 @@ module.exports = class Ig4Remote {
     this.ig4.stderr.on('data', (...args) => this.handleIg4Error(...args));
     this.ig4.on('close', (...args) => this.handleIg4Close(...args));
     this.status = "started";
+    this.publishStatus();
   }
 
   ig4Stop() {
@@ -138,6 +138,7 @@ module.exports = class Ig4Remote {
   handleIg4Close(code) {
     this.addToIg4Log(`ended with code: ${code}`);
     this.status = "stopped";
+    this.publishStatus();
   }
 
   addToIg4Log(data, type = "data") {
@@ -156,18 +157,23 @@ module.exports = class Ig4Remote {
     this.publishLog(entry);
   }
 
+  publishStatus(line = null, socket = null) {
+    socket = socket ? socket : this.server;
+    socket.publish('/sub/status', { type: "complete", payload: this.status });
+  }
+
   publishLog(line = null, socket = null) {
     socket = socket ? socket : this.server;
     if(line){
-      socket.publish('/log', { type: "delta", payload: [line] });
+      socket.publish('/sub/log', { type: "delta", payload: [line] });
     }else{
-      socket.publish('/log', { type: "complete", payload: this.log.reverse() });
+      socket.publish('/sub/log', { type: "complete", payload: this.log.reverse() });
     }
   }
 
   publishSettings(socket = null) {
     socket = socket ? socket : this.server;
-    socket.publish('/settings', { type: "complete", payload: this.config.getConfig() });
+    socket.publish('/sub/settings', { type: "complete", payload: this.config.getConfig() });
   }
 
   route_index(request, h) {
