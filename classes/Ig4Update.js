@@ -40,8 +40,9 @@ module.exports = class Ig4Update {
         .then(this.updateNPM)
         .then(() => {
             if (killAfter) {
-                process.kill();
+                return process.kill();
             }
+            return true;
         });
     }
 
