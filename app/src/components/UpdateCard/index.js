@@ -70,7 +70,7 @@ class UpdateCard extends React.Component {
               </Typography>
                 <br />
                 <Button disabled={updating} onClick={this.perform}>
-                  Install
+                  {updating ? "Installing ..." : "Install"}
               </Button>
               </CardContent>
             </div>
