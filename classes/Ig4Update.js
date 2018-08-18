@@ -27,12 +27,11 @@ module.exports = class Ig4Update {
                             return reject(error);
                         }
                         if (!success) {
-                            return reject("Unknown error.");
+                            return reject(new Error("Unknown error."));
                         }
                         resolve();
                     });
                 }
-                reject("Already up to date.");
             })
         })
         .then(this.updateNPM)
