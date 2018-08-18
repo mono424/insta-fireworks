@@ -1,5 +1,6 @@
 const Ig4Remote = require('./classes/Ig4Remote');
 var serverConfig = require('./config');
+var { version } = require('./package.json');
 
 process.argv.forEach(val => {
   if (val === "--noui") {
@@ -16,6 +17,7 @@ remote.start().then( () => {
   remote.ig4Start();
   console.log('');
   console.log('[🎆🎆] Insta-Fireworks [🎆🎆]');
+  console.log(`Version: ${version}`);
   console.log('');
   console.log(`Running on Port: ${serverConfig.port}`);
   console.log('');
