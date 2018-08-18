@@ -13,8 +13,6 @@ module.exports = class Ig4Config {
         this.credOverwritePath = __dirname + "/" + credOverwritePath;
         this.configPath = __dirname + "/" + configPath;
         this.credPath = __dirname + "/" + credPath;
-        this.oConfig = require(this.configPath);
-        this.oCred = require(this.credPath);
         this.cache = {
             config: null,
             cred: null
@@ -29,6 +27,8 @@ module.exports = class Ig4Config {
         if (! await exists(this.configOverwritePath)) {
             await writeFile(this.configOverwritePath, '{}');
         }
+        this.oConfig = require(this.configPath);
+        this.oCred = require(this.credPath);
         return this.updateCache();
     }
 
