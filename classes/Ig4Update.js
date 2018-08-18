@@ -1,4 +1,5 @@
 var Updater = require('github-update');
+var Boom = require('boom');
 
 module.exports = class Ig4Update {
 
@@ -11,7 +12,7 @@ module.exports = class Ig4Update {
 
     check() {
         let { updater } = this;
-        return new Promise((resolve, reject) => updater.check((error, upToDate) => { error ? reject(error) : resolve(!upToDate); }));
+        return new Promise((resolve, reject) => updater.check((error, upToDate) => { error ? reject(Boom.internal(error)) : resolve(!upToDate); }));
     }
 
     update(killAfter = false) {
@@ -19,17 +20,17 @@ module.exports = class Ig4Update {
             let { updater } = this;
             updater.check((error, upToDate) => {
                 if (error) {
-                    return reject(error);
+                    return reject(Boom.internal(error));
                 }
                 if (upToDate) {
-                    reject(new Error("Already up to date!"));
+                    reject(Boom.preconditionFailed("Already up to date!"));
                 }
                 updater.update((success, error) => {
                     if (error) {
-                        return reject(error);
+                        return reject(Boom.internal(error));
                     }
                     if (!success) {
-                        return reject(new Error("Unknown error."));
+                        return reject(Boom.internal("Unknown error."));
                     }
                     resolve();
                 });
