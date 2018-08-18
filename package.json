@@ -7,7 +7,7 @@
     "start": "pm2 start ./index.js",
     "dev": "pm2 start ./index.js --no-daemon",
     "stop": "pm2 kill",
-    "postinstall": "npm i && cd app && npm i && cd .. && npm run rebuild",
+    "postinstall": "cd app && npm i && cd .. && npm run rebuild",
     "rebuild": "cd app && npm run build && cd ../",
     "start-noui": "pm2 start ./index.js --noui --port=8081"
   },
