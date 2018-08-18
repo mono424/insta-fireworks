@@ -16,7 +16,7 @@ import './App.css';
 Runtime.serverUrl = window.location.host;
 
 // For Dev
-Runtime.serverUrl = "localhost:8081";
+// Runtime.serverUrl = "localhost:8081";
 
 const client = new Nes.Client(`ws://${Runtime.serverUrl}`);
 
