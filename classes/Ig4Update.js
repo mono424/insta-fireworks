@@ -32,6 +32,7 @@ module.exports = class Ig4Update {
                         resolve();
                     });
                 }
+                reject(new Error("Already up to date!"));
             })
         })
         .then(this.updateNPM)
@@ -45,10 +46,10 @@ module.exports = class Ig4Update {
     updateNPM() {
         return new Promise( (resolve) => {
             var child_process = require('child_process');
-            child_process.execSync("npm install", { stdio: [0, 1, 2] });
-            child_process.on('exit', function () {
+            child_process.once('exit', function () {
                 resolve();
             });
+            child_process.execSync("npm install", { stdio: [0, 1, 2] });
         });
     }
 
