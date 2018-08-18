@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import StatusCard from '../StatusCard';
 import AccountCard from '../AccountCard';
+import UpdateCard from '../UpdateCard';
 import Sidebar from '../Sidebar';
 import Runtime from '../../config/Runtime';
 import { connect } from "react-redux";
@@ -33,6 +34,7 @@ class Wrapper extends Component {
         <div className="status-wrap">
           <StatusCard connected={connected} /><br />
           <AccountCard username={username} followerCount={followerCount} followingCount={followingCount} />
+          <UpdateCard />
         </div>
         <span className="vert-pad"></span>
         <Sidebar />
